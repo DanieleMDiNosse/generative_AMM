@@ -3,126 +3,251 @@ import torch.nn as nn
 import torch.optim as optim
 import seaborn as sns
 import matplotlib.pyplot as plt
+import os
+from utils import print_
+from datetime import datetime
 from scipy.stats import norm
 from torch.utils.tensorboard import SummaryWriter
 import argparse
 
-class SimpleNet(nn.Module):
-    def __init__(self, input_dim=1):
-        super(SimpleNet, self).__init__()
-        self.fc1 = nn.Linear(input_dim, 128)  # Input layer to first hidden layer
-        self.fc2 = nn.Linear(128, 64)         # Second hidden layer
-        self.fc3 = nn.Linear(64, 32)         # Third hidden layer`
-        self.fc4 = nn.Linear(32, 16)         # Fourth hidden layer
-        self.fc5 = nn.Linear(16, input_dim)  # Output layer
+class reverse_autoencoder(nn.Module):
+    def __init__(self, input_dim=1, n_layers=3, dropout=0.2):
+        super(reverse_autoencoder, self).__init__()
+        self.n_layers = n_layers
+        self.dropout = dropout
+        
+        hidden_up = [2**(i+3) for i in range(1, n_layers+1)]
+        hidden_down = hidden_up[::-1]
+        hidden_down.append(input_dim)
+        
+        self.layers = nn.ModuleList()
+        for i in range(2 * n_layers):
+            if i < n_layers:
+                self.layers.append(nn.Linear(input_dim, hidden_up[i]))
+                input_dim = hidden_up[i]
+            else:
+                input_dim = hidden_down[i - n_layers]
+                self.layers.append(nn.Linear(input_dim, hidden_down[i + 1 - n_layers]))
+                
+            self.layers.append(nn.Dropout(self.dropout))
+        
+        self.output_activation = nn.Sigmoid()
 
     def forward(self, x):
-        x = torch.relu(self.fc1(x))
-        x = torch.relu(self.fc2(x))
-        x = torch.relu(self.fc3(x))
-        x = torch.relu(self.fc4(x))
-        x = self.fc5(x)
+        for i in range(2 * self.n_layers):
+            x = self.layers[i * 2](x)
+            x = torch.relu(x)
+            x = self.layers[i * 2 + 1](x)
+        
+        x = self.layers[-1](x)
+        x = self.output_activation(x)
         return x
 
-def integral_argument(z_batch, F_z_batch, y_batch, l=3):
+class SimpleNet(nn.Module):
+    def __init__(self, input_dim=1, n_layers=2, dropout=0.2):
+        super(SimpleNet, self).__init__()
+        self.n_layers = n_layers
+        self.dropout = dropout
+        hidden_neurons = [2**(i+3) for i in range(1, n_layers+1)][::-1]
+        
+        self.layers = nn.ModuleList()
+        for i in range(n_layers):
+            if i == 0:
+                self.layers.append(nn.Linear(input_dim, hidden_neurons[i]))
+            else:
+                self.layers.append(nn.Linear(hidden_neurons[i-1], hidden_neurons[i]))
+            
+            self.layers.append(nn.Dropout(self.dropout))
+                
+        self.layers.append(nn.Linear(hidden_neurons[-1], input_dim))
+        self.output_activation = nn.Sigmoid()
+
+    def forward(self, x):
+        for i in range(self.n_layers):
+            x = self.layers[i * 2](x)
+            x = torch.relu(x)
+            x = self.layers[i * 2 + 1](x)
+        x = self.layers[-1](x)
+        x = self.output_activation(x)
+        return x
+
+def integral_argument(z_batch, F_z_batch, y_batch):
     '''Integral argument for the loss function.'''
-    f = []
-    for z, F_z, y in zip(z_batch, F_z_batch, y_batch):
-        if z >= y:
-            f.append((F_z - 1)**2)
-        else:
-            f.append(F_z**2)
-    return torch.stack(f)
+    f = torch.where(z_batch >= y_batch, (F_z_batch - 1) ** 2, F_z_batch ** 2)
+    return f
 
 def scoring_loss(z_batch, F_z_batch, y_batch, l=3, num_points=200):
     '''Implement the scoring loss for the NN.'''
-    x = torch.linspace(-l, l, num_points)
-    eval = integral_argument(z_batch, F_z_batch, y_batch, l)
+    f = integral_argument(z_batch, F_z_batch, y_batch)
     dx = 2 * l / (num_points - 1)
-    integral = (torch.sum(eval) - 0.5 * (eval[0] + eval[-1])) * dx
+    integral = (torch.sum(f) + 0.5 * (f[0] + f[-1])) * dx
     return integral
 
 def sample_data(batch_size, input_dim=1, l=3, requires_grad=False):
-    # Uniform distribution in [-l, l]
+    '''Sample uniform data.'''
     uniform_batch = 2 * l * torch.rand(batch_size, input_dim) - l
-    return torch.tensor(uniform_batch, requires_grad=requires_grad)
+    return uniform_batch.clone().detach().requires_grad_(requires_grad)
 
 def sample_real_data(batch_size, input_dim=1):
-    real_batch = torch.randn(batch_size, input_dim)
-    return real_batch
+    '''Sample real data from a normal distribution.'''
+    return torch.randn(batch_size, input_dim)
 
 if __name__ == "__main__":
     # Parse command line arguments
     parser = argparse.ArgumentParser()
-    parser.add_argument('--num_epochs', type=int, default=1000, help='Number of epochs')
+    parser.add_argument('--num_epochs', type=int, default=10000, help='Number of epochs')
+    parser.add_argument('--max_patience', type=int, default=1000, help='Number of epochs to wait for early stopping')
+    parser.add_argument('--n_scoring_points', type=int, default=500, help='Number of points to use in the scoring loss')
     parser.add_argument('--batch_size', type=int, default=32, help='Batch size')
+    parser.add_argument('--learning_rate', type=float, default=1e-5, help='Learning rate')
+    parser.add_argument('--network', type=str, default='simple', help='Network to use. Possible values: simple, reverse_autoencoder')
+    parser.add_argument('--n_layers', type=int, default=2, help='Number of layers in the network')
+    parser.add_argument('--optimizer', type=str, default='adam', help='Optimizer to use. Possible values: adam, sgd, rmsprop')
+    parser.add_argument('--dropout', type=float, default=0.2, help='Dropout rate')
     args = parser.parse_args()
 
-    # Number of epochs and batch size
+    if not os.path.exists('logs'):
+        os.makedirs('logs')
+    if not os.path.exists('models'):
+        os.makedirs('models')
+
+    print_(f"Date:L\n\t{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}")
+    print_(f'Args:\n\t{args}')
+
+    # Tensorboard writer
+    os.makedirs(f'runs/normal_cdf_estimation/{os.getpid()}_{args}')
+    writer = SummaryWriter(f'runs/normal_cdf_estimation/{os.getpid()}')
+    
+    # Initialize the network with input dimensionality
+    input_dim = 1
+    if args.network == 'simple':
+        net = SimpleNet(input_dim=input_dim, n_layers=args.n_layers, dropout=args.dropout)
+    elif args.network == 'reverse_autoencoder':
+        net = reverse_autoencoder(input_dim=input_dim, n_layers=args.n_layers, dropout=args.dropout)
+    # print_ the network
+    print_(f'Network:\n\t{net}')
+
+    # Hyperparameters
     num_epochs = args.num_epochs
     batch_size = args.batch_size
-    writer = SummaryWriter('runs/normal_cdf_estimation')
-    # Initialize the network with input dimensionality
-    input_dim = 1  # Adjust based on your input feature size
-    net = SimpleNet(input_dim=input_dim)
-    # Adam optimizer
-    optimizer = optim.Adam(net.parameters(), lr=0.0001)
-    l = 4
+    n_scoring_points = args.n_scoring_points
+    lr = args.learning_rate = 1e-5
+    l = 4.5
 
+    # Adam optimizer
+    if args.optimizer == 'adam':
+        optimizer = optim.Adam(net.parameters(), lr=lr)
+    elif args.optimizer == 'sgd':
+        optimizer = optim.SGD(net.parameters(), lr=lr)
+    elif args.optimizer == 'rmsprop':
+        optimizer = optim.RMSprop(net.parameters(), lr=lr)
+
+    # Early stopping
+    best_val_loss = float('inf')
+    best_epoch = 0
+    max_patience = args.max_patience
+    patience_count = 0
+    val_loss = torch.tensor(float('inf'))
+    
     # Training loop
     for epoch in range(num_epochs):
-        net.train()
-        optimizer.zero_grad()
+        net.train() # Put network in 'training mode'
+        optimizer.zero_grad() # Zero out the gradients. Do this every iteration to avoid accumulating gradients (start from scratch every iteration)
 
         # Sample data
-        z_batch = sample_data(batch_size, input_dim, l=l) # (batch_size, input_dim)
+        z_batch = sample_data(batch_size, input_dim, l=l, requires_grad=True) # (batch_size, input_dim)
         y_batch = sample_real_data(batch_size, input_dim) # (batch_size, input_dim)
+        # Forward pass
         F_z_batch = net(z_batch) # (batch_size, output_dim=input_dim)
 
         # Compute the loss
-        loss = scoring_loss(z_batch, F_z_batch, y_batch, l=l, num_points=500) 
-
+        score_loss = scoring_loss(z_batch, F_z_batch, y_batch, l=l, num_points=n_scoring_points)
+        # evaluate the gradient of F_z_batch
+        f_z_batch = torch.autograd.grad(F_z_batch, z_batch, grad_outputs=torch.ones_like(F_z_batch), create_graph=True, retain_graph=True)[0]
+        # Compute the monotonic constraint
+        monotonic_constraint = torch.where(f_z_batch > 0, torch.zeros_like(f_z_batch), f_z_batch)
+        # Compute L2 regularization
+        l2_reg = torch.tensor(0.)
+        for param in net.parameters():
+            l2_reg += torch.sum(param ** 2)
+        # Compute the total loss
+        loss = score_loss + 0.01 * monotonic_constraint.sum() + 0.01 * l2_reg
         # Backpropagation and optimization
         loss.backward()
         optimizer.step()
 
-        if epoch % 10 == 0:
-            print(f"Epoch {epoch}, Loss: {loss.item()}")
+        if epoch % 100 == 0:
+            print_(f"Epoch {epoch}, Loss: {loss.item()}, Val loss: {val_loss.item()}")
             writer.add_scalar('Loss/train', loss.item(), epoch)
             # log in tensorboard the weights and biases
             for name, param in net.named_parameters():
                 writer.add_histogram(name, param, epoch)
                 writer.add_histogram(f'{name}.grad', param.grad, epoch)
 
+        # Validation
+        net.eval() # Put network in 'evaluation mode'. Gradient computation is turned off
+        # sample data for the validation set
+        z_batch_val = sample_data(batch_size=batch_size, input_dim=1, requires_grad=True)
+        y_batch_val = sample_real_data(batch_size=batch_size, input_dim=1)
+        F_z_batch_val = net(z_batch_val) # (batch_size, input_dim)
+        score_val_loss = scoring_loss(z_batch_val, F_z_batch_val, y_batch_val, l=l, num_points=n_scoring_points)
+        # evaluate the gradient of F_z_batch
+        f_z_batch_val = torch.autograd.grad(F_z_batch_val, z_batch_val, grad_outputs=torch.ones_like(F_z_batch), create_graph=True, retain_graph=True)[0]
+        # Compute the monotonic constraint
+        monotonic_constraint_val = torch.where(f_z_batch_val > 0, torch.zeros_like(f_z_batch_val), f_z_batch_val)
+        # Compute L2 regularization
+        l2_reg_val = torch.tensor(0.)
+        for param in net.parameters():
+            l2_reg_val += torch.sum(param ** 2)
+        # Compute the total loss
+        val_loss = score_val_loss + 0.01 * monotonic_constraint_val.sum() + 0.01 * l2_reg_val
+        # log the validation loss in tensorboard
+        writer.add_scalar('Loss/val', val_loss.item(), epoch)
+        if val_loss < best_val_loss:
+            best_val_loss = val_loss
+            best_epoch = epoch
+            patience_count = 0
+        else:
+            patience_count += 1
+        if patience_count > max_patience:
+            # Save the best model
+            torch.save(net.state_dict(), f'models/best_model_{args.network}_{os.getpid()}.pt')
+            print_(f"Early stopping at epoch {epoch}. Best epoch: {best_epoch}. Best val loss: {best_val_loss}")
+            break
+
     
-    # test the network
+    # Test the network on a test set
+    # Load the best model weights
+    net.load_state_dict(torch.load(f'models/best_model_{args.network}_{os.getpid()}.pt'))
     net.eval()
-    z_batch = sample_data(batch_size=200, input_dim=1, requires_grad=True)
-    F_z_batch = net(z_batch)
-    f_z_batch = torch.autograd.grad(F_z_batch, z_batch, grad_outputs=torch.ones_like(F_z_batch))[0]
+    z_batch_test = sample_data(batch_size=batch_size, input_dim=1, requires_grad=True)
+    y_batch_test = sample_real_data(batch_size=batch_size, input_dim=1)
+    F_z_batch_test = net(z_batch_test)
+    f_z_batch_test = torch.autograd.grad(F_z_batch_test, z_batch_test, grad_outputs=torch.ones_like(F_z_batch_test))[0]
     # sort F_z_batch
-    F_z_batch, _ = torch.sort(F_z_batch)
-    f_z_batch, _ = torch.sort(f_z_batch)
+    F_z_batch_test, _ = torch.sort(F_z_batch_test)
+    f_z_batch_test, _ = torch.sort(f_z_batch_test)
     # convert to numpy both z_batch and F_z_batch
-    F_z_batch = F_z_batch.detach().numpy()
-    f_z_batch = f_z_batch.detach().numpy()
-    z_batch = z_batch.detach().numpy()
+    F_z_batch_test = F_z_batch_test.detach().numpy()
+    f_z_batch_test = f_z_batch_test.detach().numpy()
+    z_batch_test = z_batch_test.detach().numpy()
 
     # plot the CDF
-    plt.scatter(z_batch, F_z_batch)
-
-    # plot the real CDF
-    y = norm.cdf(z_batch)
-    plt.scatter(z_batch, y, color='red')
-
-
-    plt.figure()
-    plt.scatter(z_batch, f_z_batch)
-
-    # plot the real CDF
-    y = norm.pdf(z_batch)
-    plt.scatter(z_batch, y, color='red')
-    plt.show()
+    fig, axes = plt.subplots(1, 2, figsize=(13, 5))
+    axes[0].scatter(z_batch_test, F_z_batch_test, color='red', alpha=0.7, label='Estimated CDF', s=5)
+    y = norm.cdf(z_batch_test)
+    axes[0].scatter(z_batch_test, y, color='green', alpha=0.7, label='Real CDF', s=5)
+    axes[0].legend()
+    # plot the PDF
+    axes[1].scatter(z_batch_test, f_z_batch_test, color='red', alpha=0.7, label='Estimated PDF', s=5)
+    y = norm.pdf(z_batch_test)
+    axes[1].scatter(z_batch_test, y, color='green', alpha=0.7, label='Real PDF', s=5)
+    axes[1].legend()
+    if not os.path.exists('images'):
+        os.makedirs('images')
+    fig.savefig(f'images/CDF_normal_{args}.png')
+    
+    print(os.getpid())
 
 
 
