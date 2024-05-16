@@ -44,29 +44,37 @@ class reverse_autoencoder(nn.Module):
         return x
 
 class SimpleNet(nn.Module):
-    def __init__(self, input_dim=1, n_layers=2, dropout=0.2):
+    def __init__(self, input_dim=1, cond_input=1, output_dim=1, n_layers=2, dropout=0.2):
         super(SimpleNet, self).__init__()
         self.n_layers = n_layers
         self.dropout = dropout
+        self.cond_input = cond_input
+        total_input_dim = input_dim + cond_input
+
+        # Create hidden layers based on the total input dimension
         hidden_neurons = [2**(i+3) for i in range(1, n_layers+1)][::-1]
         
         self.layers = nn.ModuleList()
-        for i in range(n_layers):
-            if i == 0:
-                self.layers.append(nn.Linear(input_dim, hidden_neurons[i]))
-            else:
-                self.layers.append(nn.Linear(hidden_neurons[i-1], hidden_neurons[i]))
-            
+        # First layer now takes the concatenated input dimension
+        self.layers.append(nn.Linear(total_input_dim, hidden_neurons[0]))
+        self.layers.append(nn.Dropout(self.dropout))
+        
+        for i in range(1, n_layers):
+            self.layers.append(nn.Linear(hidden_neurons[i-1], hidden_neurons[i]))
             self.layers.append(nn.Dropout(self.dropout))
                 
-        self.layers.append(nn.Linear(hidden_neurons[-1], input_dim))
+        # Final layer that maps to the output dimension
+        self.layers.append(nn.Linear(hidden_neurons[-1], output_dim))
         self.output_activation = nn.Sigmoid()
 
-    def forward(self, x):
-        for i in range(self.n_layers):
-            x = self.layers[i * 2](x)
-            x = torch.relu(x)
-            x = self.layers[i * 2 + 1](x)
+    def forward(self, input, condition):
+        # Concatenate input and condition vectors along the feature dimension
+        x = torch.cat((input, condition), dim=1)  # Ensure input and condition are of proper dimensions
+        for i in range(2 * self.n_layers):
+            x = self.layers[i](x)
+            if i < 2 * self.n_layers - 1:  # Apply ReLU only to hidden layers
+                x = torch.relu(x)
+        
         x = self.layers[-1](x)
         x = self.output_activation(x)
         return x
@@ -95,10 +103,18 @@ def l2_regularization(net):
         l2_reg += torch.sum(param ** 2)
     return l2_reg
 
-def sample_data(batch_size, input_dim=1, l=3, requires_grad=False):
-    '''Sample uniform data.'''
-    uniform_batch = 2 * l * torch.rand(batch_size, input_dim) - l
-    return uniform_batch.clone().detach().requires_grad_(requires_grad)
+def sample_data(batch_size, l=3, requires_grad=False, include_condition=True):
+    '''Sample uniform data, possibly including a condition vector.'''
+    z_batch = 2 * l * torch.rand(batch_size, 1) - l
+    if include_condition:
+        # Assuming the condition is a vector [0, 1] repeated for each batch
+        z_batch_cond = torch.tensor([[0, 1]] * batch_size, dtype=torch.float32)
+        # Concatenate condition along the feature dimension
+        # z_batch_cond = torch.cat((z_batch, condition), dim=1)
+    else:
+        z_batch_cond = None
+    return z_batch.clone().detach().requires_grad_(requires_grad), z_batch_cond.clone().detach().requires_grad_(requires_grad)
+
 
 def sample_normal(batch_size, input_dim=1):
     '''Sample real data from a normal distribution.'''
@@ -132,8 +148,9 @@ if __name__ == "__main__":
     
     # Initialize the network with input dimensionality
     input_dim = 1
+    cond_input = 2
     if args.network == 'simple':
-        net = SimpleNet(input_dim=input_dim, n_layers=args.n_layers, dropout=args.dropout)
+        net = SimpleNet(input_dim=input_dim, cond_input=cond_input, n_layers=args.n_layers, dropout=args.dropout)
     elif args.network == 'reverse_autoencoder':
         net = reverse_autoencoder(input_dim=input_dim, n_layers=args.n_layers, dropout=args.dropout)
     # print_ the network
@@ -144,7 +161,7 @@ if __name__ == "__main__":
     batch_size = args.batch_size
     n_scoring_points = args.n_scoring_points
     lr = args.learning_rate
-    l = 4.5
+    l = 5
 
     # Adam optimizer
     if args.optimizer == 'adam':
@@ -167,23 +184,24 @@ if __name__ == "__main__":
         optimizer.zero_grad() # Zero out the gradients. Do this every iteration to avoid accumulating gradients (start from scratch every iteration)
 
         # Sample data
-        z_batch = sample_data(batch_size, input_dim, l=l, requires_grad=True) # (batch_size, input_dim)
-        y_batch = sample_normal(batch_size, input_dim) # (batch_size, input_dim)
+        z_batch, z_batch_cond = sample_data(batch_size, l=l, requires_grad=True, include_condition=True) # (batch_size, input_dim)
+        y_batch = sample_normal(batch_size, input_dim=1) # (batch_size, input_dim)
         # Forward pass
-        F_z_batch = net(z_batch) # (batch_size, output_dim=input_dim)
+        F_z_batch = net(z_batch, z_batch_cond) # (batch_size, output_dim=input_dim)
 
-        # Compute the loss
+        # Compute the losses
         score_loss = scoring_loss(z_batch, F_z_batch, y_batch, l=l, num_points=n_scoring_points)
         monotonic_penalty = monotonic_loss(z_batch, F_z_batch)
         l2_reg = l2_regularization(net)
         # Compute the total loss
         loss = score_loss + 0.01 * monotonic_penalty + 0.01 * l2_reg
+
         # Backpropagation and optimization
         loss.backward()
         optimizer.step()
 
         if epoch % 100 == 0:
-            print_(f"Epoch {epoch}, Loss: {loss.item()}, Val loss: {val_loss.item()}")
+            print_(f"{os.getpid()} Epoch {epoch}, Loss: {loss.item()}, Val loss: {val_loss.item()}")
             writer.add_scalar('Loss/train', loss.item(), epoch)
             # log in tensorboard the weights and biases
             for name, param in net.named_parameters():
@@ -193,9 +211,9 @@ if __name__ == "__main__":
         # Validation
         net.eval() # Put network in 'evaluation mode'. Gradient computation is turned off
         # sample data for the validation set
-        z_batch_val = sample_data(batch_size=batch_size, input_dim=1, requires_grad=True)
+        z_batch_val, z_batch_condition_val = sample_data(batch_size=batch_size, requires_grad=True, include_condition=True)
         y_batch_val = sample_normal(batch_size=batch_size, input_dim=1)
-        F_z_batch_val = net(z_batch_val) # (batch_size, input_dim)
+        F_z_batch_val = net(z_batch_val, z_batch_condition_val)
         score_val_loss = scoring_loss(z_batch_val, F_z_batch_val, y_batch_val, l=l, num_points=n_scoring_points)
         monotonic_penalty_val = monotonic_loss(z_batch_val, F_z_batch_val)
         l2_reg_val = l2_regularization(net)
@@ -222,9 +240,9 @@ if __name__ == "__main__":
     # Load the best model weights
     net.load_state_dict(torch.load(f'models/best_model_{args.network}_{os.getpid()}.pt'))
     net.eval()
-    z_batch_test = sample_data(batch_size=batch_size, input_dim=1, requires_grad=True)
+    z_batch_test, z_batch_cond_test = sample_data(batch_size=batch_size, requires_grad=True, include_condition=True)
     y_batch_test = sample_normal(batch_size=batch_size, input_dim=1)
-    F_z_batch_test = net(z_batch_test)
+    F_z_batch_test = net(z_batch_test, z_batch_cond_test)
     f_z_batch_test = torch.autograd.grad(F_z_batch_test, z_batch_test, grad_outputs=torch.ones_like(F_z_batch_test))[0]
     # sort F_z_batch
     F_z_batch_test, _ = torch.sort(F_z_batch_test)
@@ -247,7 +265,7 @@ if __name__ == "__main__":
     axes[1].legend()
     if not os.path.exists('images'):
         os.makedirs('images')
-    fig.savefig(f'images/CDF_normal_{args}.png')
+    fig.savefig(f'images/{os.getpid()}_CDF_normal_{args}.png')
     
     print(os.getpid())
 
