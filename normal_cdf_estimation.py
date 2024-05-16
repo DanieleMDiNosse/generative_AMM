@@ -83,6 +83,18 @@ def scoring_loss(z_batch, F_z_batch, y_batch, l=3, num_points=200):
     integral = (torch.sum(f) + 0.5 * (f[0] + f[-1])) * dx
     return integral
 
+def monotonic_loss(z_batch, F_z_batch):
+    '''Implement the monotonic loss for the NN.'''
+    f_z_batch = torch.autograd.grad(F_z_batch, z_batch, grad_outputs=torch.ones_like(F_z_batch), create_graph=True, retain_graph=True)[0]
+    return torch.where(f_z_batch > 0, torch.zeros_like(f_z_batch), f_z_batch).sum()
+
+def l2_regularization(net):
+    '''Implement the L2 regularization for the NN.'''
+    l2_reg = torch.tensor(0.)
+    for param in net.parameters():
+        l2_reg += torch.sum(param ** 2)
+    return l2_reg
+
 def sample_data(batch_size, input_dim=1, l=3, requires_grad=False):
     '''Sample uniform data.'''
     uniform_batch = 2 * l * torch.rand(batch_size, input_dim) - l
@@ -162,16 +174,10 @@ if __name__ == "__main__":
 
         # Compute the loss
         score_loss = scoring_loss(z_batch, F_z_batch, y_batch, l=l, num_points=n_scoring_points)
-        # evaluate the gradient of F_z_batch
-        f_z_batch = torch.autograd.grad(F_z_batch, z_batch, grad_outputs=torch.ones_like(F_z_batch), create_graph=True, retain_graph=True)[0]
-        # Compute the monotonic constraint
-        monotonic_constraint = torch.where(f_z_batch > 0, torch.zeros_like(f_z_batch), f_z_batch)
-        # Compute L2 regularization
-        l2_reg = torch.tensor(0.)
-        for param in net.parameters():
-            l2_reg += torch.sum(param ** 2)
+        monotonic_penalty = monotonic_loss(z_batch, F_z_batch)
+        l2_reg = l2_regularization(net)
         # Compute the total loss
-        loss = score_loss + 0.01 * monotonic_constraint.sum() + 0.01 * l2_reg
+        loss = score_loss + 0.01 * monotonic_penalty + 0.01 * l2_reg
         # Backpropagation and optimization
         loss.backward()
         optimizer.step()
@@ -191,16 +197,9 @@ if __name__ == "__main__":
         y_batch_val = sample_real_data(batch_size=batch_size, input_dim=1)
         F_z_batch_val = net(z_batch_val) # (batch_size, input_dim)
         score_val_loss = scoring_loss(z_batch_val, F_z_batch_val, y_batch_val, l=l, num_points=n_scoring_points)
-        # evaluate the gradient of F_z_batch
-        f_z_batch_val = torch.autograd.grad(F_z_batch_val, z_batch_val, grad_outputs=torch.ones_like(F_z_batch), create_graph=True, retain_graph=True)[0]
-        # Compute the monotonic constraint
-        monotonic_constraint_val = torch.where(f_z_batch_val > 0, torch.zeros_like(f_z_batch_val), f_z_batch_val)
-        # Compute L2 regularization
-        l2_reg_val = torch.tensor(0.)
-        for param in net.parameters():
-            l2_reg_val += torch.sum(param ** 2)
-        # Compute the total loss
-        val_loss = score_val_loss + 0.01 * monotonic_constraint_val.sum() + 0.01 * l2_reg_val
+        monotonic_penalty_val = monotonic_loss(z_batch_val, F_z_batch_val)
+        l2_reg_val = l2_regularization(net)
+        val_loss = score_val_loss + 0.01 * monotonic_penalty_val + 0.01 * l2_reg_val
         # log the validation loss in tensorboard
         writer.add_scalar('Loss/val', val_loss.item(), epoch)
         if val_loss < best_val_loss:
