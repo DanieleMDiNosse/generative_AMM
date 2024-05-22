@@ -51,7 +51,7 @@ class SimpleNet(nn.Module):
         self.cond_input = cond_input
         total_input_dim = input_dim + cond_input
 
-        # Create hidden layers based on the total input dimension
+        # Create hidden layers based on the total number of layers
         hidden_neurons = [2**(i+3) for i in range(1, n_layers+1)][::-1]
         
         self.layers = nn.ModuleList()
@@ -114,7 +114,6 @@ def sample_data(batch_size, l=3, requires_grad=False, include_condition=True):
     else:
         z_batch_cond = None
     return z_batch.clone().detach().requires_grad_(requires_grad), z_batch_cond.clone().detach().requires_grad_(requires_grad)
-
 
 def sample_normal(batch_size, input_dim=1):
     '''Sample real data from a normal distribution.'''
