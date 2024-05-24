@@ -163,3 +163,7 @@ images/
 logs/
 runs/
 models/
+data/
+
+# personal notebooks
+personal.ipynb
