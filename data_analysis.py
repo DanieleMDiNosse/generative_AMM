@@ -1,5 +1,8 @@
+'''This script contains some functions that can be used to visualize and analyze the data from the Uniswap V3 dataset.'''
+
 import pickle
 import os
+import numba as nb
 import numpy as np
 import matplotlib.pyplot as plt
 plt.style.use('ggplot')
@@ -49,6 +52,23 @@ def liquidity_dist_per_tickid(mint_df_path, burn_df_path, pool_address):
     df = tick_df[tick_df.pool_contract_address == pool_address].sort_values(by="tick_id")
     df["liquidity_gross_delta"].astype(float).plot()
     return None
+
+def sliding_window_difference(liquidity_events_df, window_size, step_size):
+    differences = []
+    timestamps = []
+    for start in tqdm(range(0, len(liquidity_events_df) - window_size, step_size)):
+        end = start + window_size
+        window = liquidity_events_df[start:end]
+        mint_sum = window[window['Event'] == 'Mint'].sum()
+        burn_sum = window[window['Event'] == 'Burn'].sum()
+        
+        diff_amount1 = mint_sum['amount1'] - burn_sum['amount1']
+        diff_amount0 = mint_sum['amount0'] - burn_sum['amount0']
+        
+        differences.append((diff_amount1, diff_amount0))
+        timestamps.append(window.index[int(window_size/2)])
+    
+    return np.array(timestamps), np.array(differences)
  
 if __name__ == '__main__':
     # Parse the command line arguments
@@ -57,33 +77,45 @@ if __name__ == '__main__':
     parser.add_argument('--liquidity_amounts', action='store_true', help='Plot the liquidity amounts for events')
     parser.add_argument('--liquidity_dist_price', action='store_true', help='Plot the distribution of liquidity across price ranges')
     parser.add_argument('--liquidity_dist_tickid', action='store_true', help='Plot the distribution of liquidity across tickid')
+    parser.add_argument('--sliding_window_difference', action='store_true', help='Plot the sliding window difference of liquidity')
+    parser.add_argument('--all', action='store_true', help='Enable all plot options')
     args = parser.parse_args()
+
+    if args.all:
+        args.time_diffs = True
+        args.liquidity_amounts = True
+        args.liquidity_dist_price = True
+        args.liquidity_dist_tickid = True
+        args.sliding_window_difference = True
 
     # Load the data
     usdc_weth = pickle.load(open('data/usdc_weth_05.pickle', 'rb'))
+    usdc_weth = usdc_weth.drop_duplicates()
 
     if args.time_diffs:
-        fig, ax = plt.subplots(2, 2, figsize=(15, 10), tight_layout=True)
+        fig, ax = plt.subplots(2, 2, figsize=(13, 8), tight_layout=True)
         for i, event in enumerate(['Mint', 'Burn', 'Swap_X2Y', 'Swap_Y2X']):
             time_diff = time_diff_dist(usdc_weth, event)
             # plot histograms
             ax[i//2, i%2].hist(time_diff, bins=100, log=True)
             ax[i//2, i%2].set_title(f'Time differences for {event}')
             ax[i//2, i%2].set_yscale('log')
+        plt.savefig('images/time_diffs.png')
     
     if args.liquidity_amounts:
-        fig, ax = plt.subplots(2, 2, figsize=(15, 10), tight_layout=True)
+        fig, ax = plt.subplots(2, 2, figsize=(13, 8), tight_layout=True)
         for i, event in enumerate(['Mint', 'Burn', 'Swap_X2Y', 'Swap_Y2X']):
             liquidity_amounts = liquidity_events_amount_dist(usdc_weth, event, token=1)
             # plot histograms
             ax[i//2, i%2].hist(liquidity_amounts, bins=100, log=True)
             ax[i//2, i%2].set_title(f'Liquidity amounts for {event}')
             ax[i//2, i%2].set_yscale('log')
+        plt.savefig('images/liquidity_amounts.png')
 
     if args.liquidity_dist_price:
         liquidity_dist = liquidity_dist_per_prange(usdc_weth, delta=100)
         # Plot the distribution of liquidity across price ranges
-        plt.figure(figsize=(12, 6))
+        plt.figure(figsize=(10, 4))
         liquidity_dist.plot(kind='bar', edgecolor='k', alpha=0.7)
         plt.xlabel('Price Ranges')
         plt.ylabel('Total Liquidity')
@@ -91,6 +123,7 @@ if __name__ == '__main__':
         plt.xticks(rotation=45)
         plt.grid(True)
         plt.tight_layout()
+        plt.savefig('images/liquidity_dist_price.png')
         plt.show()
 
     if args.liquidity_dist_tickid:
@@ -102,5 +135,22 @@ if __name__ == '__main__':
         wbtc_usdc_03 = "0x99ac8ca7087fa4a2a1fb6357269965a2014abc35" #WBTC-USDC 03
         wbtc_usdt_03 = "0x9db9e0e53058c89e5b94e29621a205198648425b" #WBTC-USDT 03
         liquidity_dist_per_tickid('data/uniswap-v3-mint.csv', 'data/uniswap-v3-burn.csv', usdc_weth_05)
+        plt.savefig('images/liquidity_dist_tickid.png')
+        plt.show()
+    
+    if args.sliding_window_difference:
+        timestamps, differences = sliding_window_difference(usdc_weth, window_size=3000, step_size=50)
+        plt.figure(figsize=(10, 4))
+        # plt.plot(timestamps, differences[:, 0], label='Amount1')
+        # plt.plot(timestamps, differences[:, 1], label='Amount0')
+        plt.plot(differences[:, 0], label='Amount1')
+        plt.plot(differences[:, 1], label='Amount0')
+        plt.xlabel('Timestamp')
+        plt.ylabel('Liquidity Difference')
+        plt.title('Liquidity Difference for USDC/WETH pool')
+        plt.legend()
+        plt.grid(True)
+        plt.tight_layout()
+        plt.savefig('images/sliding_window_difference.png')
         plt.show()
 
