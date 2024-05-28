@@ -5,14 +5,66 @@ from scipy.special import hyp2f1
 
 # qExponential function
 def q_exponential(x, q):
-    temp = 1 + (1-q)*x
-    return np.where(temp>0, temp, 0)**(1/(1-q))
+    if not isinstance(x, np.ndarray):
+        x = np.array(x)
+    if q != 1:
+        temp = 1 + (1-q)*x
+        return np.where(temp>0, temp**(1/(1-q)), 0)
+    else:
+        return np.exp(x)
 
+# Power-law 
+def power_law(x, alpha):
+    return alpha * x ** (-alpha - 1)
+
+# Fitting qExponential-Power-law
+def fit_qexp_power_law(x_train, n_it=50):
+    from scipy.optimize import Bounds
+    from scipy.optimize import minimize
+
+    # Negative Log Likelihood
+    def negative_log_likelihood(params, x):
+        q, alpha = params
+        pdf_values = q_exponential(x, q) * power_law(x, alpha)
+        log_pdf_values = np.log(pdf_values)
+        return -np.sum(log_pdf_values)
+
+    initial_guess = [1.25, 1]  # Initial guesses for q and sigma
+    bounds = Bounds([0, 1], [2.95, np.inf], keep_feasible=True)
+
+    # First fit with "smart" initialization
+    result = minimize(negative_log_likelihood, initial_guess,
+                      args=(x_train), method='SLSQP', bounds=bounds)
+    if result.success:
+        best_res, best_neg_ll = result, result.fun
+    else:
+        best_res, best_neg_ll = None, np.inf
+    
+    # Other fit with random initializations
+    for temp_seed in range(n_it):
+        np.random.seed(temp_seed)
+        initial_guess = np.random.uniform(0, 1, 2)
+        initial_guess[0] *= 2.95
+        initial_guess[1] += 1e-6
+
+        result = minimize(negative_log_likelihood, initial_guess,
+                          args=(x_train), method='SLSQP', bounds=bounds)
+        if result.success and (result.fun < best_neg_ll):
+            best_res = result
+            best_neg_ll = result.fun
+    if not isinstance(best_res, type(None)):
+        return {'q':best_res.x[0], 'alpha':best_res.x[1], 'neg_ll':best_res.fun}
+    else:
+        raise ValueError("Optimization failed.")
+    
 # Probability Density Function
 def pdf(x, q, sigma=1):
     # Check q
     if q>=3:
         raise ValueError('q must be < 3')
+    # Check x
+    if not isinstance(x, np.ndarray):
+        x = np.array(x)
     
     # Compute the normalization constant
     if q < 1:
@@ -30,9 +82,12 @@ def pdf(x, q, sigma=1):
     return pdf
 
 # Fit qGaussian - both q and sigma
-def fit(x_train):
+def fit(x_train, n_it=50):
     from scipy.optimize import Bounds
     from scipy.optimize import minimize
+
+    if not isinstance(x_train, np.ndarray):
+        x_train = np.array(x_train)
 
     # Negative Log Likelihood
     def negative_log_likelihood(params, x):
@@ -41,12 +96,31 @@ def fit(x_train):
         log_pdf_values = np.log(pdf_values)
         return -np.sum(log_pdf_values)
 
-    initial_guess = [1.25, 1.0]  # Initial guesses for q and sigma
+    initial_guess = [1.25, np.std(x_train)]  # Initial guesses for q and sigma
     bounds = Bounds([0, 1e-6], [2.95, np.inf], keep_feasible=True)
+
+    # First fit with "smart" initialization
     result = minimize(negative_log_likelihood, initial_guess,
                       args=(x_train), method='SLSQP', bounds=bounds)
     if result.success:
-        return {'q':result.x[0], 'sigma':result.x[1], 'neg_ll':result.fun}
+        best_res, best_neg_ll = result, result.fun
+    else:
+        best_res, best_neg_ll = None, np.inf
+    
+    # Other fit with random initializations
+    for temp_seed in range(n_it):
+        np.random.seed(temp_seed)
+        initial_guess = np.random.uniform(0, 1, 2)
+        initial_guess[0] *= 2.95
+        initial_guess[1] += 1e-6
+
+        result = minimize(negative_log_likelihood, initial_guess,
+                          args=(x_train), method='SLSQP', bounds=bounds)
+        if result.success and (result.fun < best_neg_ll):
+            best_res = result
+            best_neg_ll = result.fun
+    if not isinstance(best_res, type(None)):
+        return {'q':best_res.x[0], 'sigma':best_res.x[1], 'neg_ll':best_res.fun}
     else:
         raise ValueError("Optimization failed.")
 

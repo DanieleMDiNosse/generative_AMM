@@ -17,11 +17,11 @@ from eth_defi.uniswap_v3.constants import UNISWAP_V3_FACTORY_CREATED_AT_BLOCK
 from eth_defi.uniswap_v3.events import fetch_events_to_csv
 from eth_defi.event_reader.json_state import JSONFileScanState
 
-folder = '../data/tmp4'
+folder = '../data/tmp5'
 
 # Take a snapshot of N blocks after Uniswap v3 deployment
-start_block = UNISWAP_V3_FACTORY_CREATED_AT_BLOCK
-end_block = UNISWAP_V3_FACTORY_CREATED_AT_BLOCK + 5_000_000
+start_block = UNISWAP_V3_FACTORY_CREATED_AT_BLOCK + 4_980_000
+end_block = UNISWAP_V3_FACTORY_CREATED_AT_BLOCK + 10_000_000
 
 # Stores the last block number of event data we store
 state = JSONFileScanState(folder+"/uniswap-v3-price-scan.json")
@@ -181,6 +181,140 @@ price_transaction l'ho calcolato io come abs( amount0 / amount1 ).
 MINT: amount di fatto corrisponde a L aggiunto o sottratto, dove L è la liquidità virtuale
 '''
 
+#%% #%% Step 3: Merge the data to obtain the ultimate dataset
+
+#------------------------------------------ Some general info...
+
+folder = '../data/tmp5'
+first_block = 0
+first_block = 17369621
+
+swap_df = pd.read_csv(f"{folder}/uniswap-v3-swap.csv")
+swap_df = swap_df[ swap_df.block_number > first_block ]
+print(f"We have total {len(swap_df):,} Uniswap swap events in the loaded dataset")
+column_names = ", ".join([n for n in swap_df.columns])
+print("Swap data columns are:", column_names)
+print('\n')
+
+created_df = pd.read_csv(f"{folder}/uniswap-v3-poolcreated.csv")
+created_df = created_df[ created_df.block_number > first_block ]
+print(f"We have total {len(created_df):,} created pools in the loaded dataset")
+column_names = ", ".join([n for n in created_df.columns])
+print("Created pools columns are:", column_names)
+print('\n')
+
+mint_df = pd.read_csv(f"{folder}/uniswap-v3-mint.csv")
+mint_df = mint_df[ mint_df.block_number > first_block ]
+print(f"We have total {len(mint_df):,} mint events in the loaded dataset")
+column_names = ", ".join([n for n in mint_df.columns])
+print("Mint data columns are:", column_names)
+print('\n')
+
+burn_df = pd.read_csv(f"{folder}/uniswap-v3-burn.csv")
+burn_df = burn_df[ burn_df.block_number > first_block ]
+print(f"We have total {len(burn_df):,} burn events in the loaded dataset")
+column_names = ", ".join([n for n in burn_df.columns])
+print("Burn data columns are:", column_names)
+print('\n')
+
+#------------------------------------------ Fetch USDC-WETH 005 details
+from eth_defi.uniswap_v3.pool import fetch_pool_details
+from eth_defi.uniswap_v3.price import get_onchain_price
+
+pool_address = "0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640" #USDC-WETH 005
+pool_address = "0x8ad599c3A0ff1De082011EFDDc58f1908eb6e6D8" #USDC-WETH 03
+pool_address = "0x7bea39867e4169dbe237d55c8242a8f2fcdcc387" #USDC-WETH 1
+pool_address = "0x3416cf6c708da44db2624d63ea0aaef7113527c6" #DAI-USDC 001
+pool_address = "0x99ac8ca7087fa4a2a1fb6357269965a2014abc35" #WBTC-USDC 03
+pool_address = "0x9db9e0e53058c89e5b94e29621a205198648425b" #WBTC-USDT 03
+
+pool_details = fetch_pool_details(web3, pool_address)
+reverse_quote_base = True
+
+print(pool_details)
+print("token0 is", pool_details.token0)
+print("token1 is", pool_details.token1)
+print('\n')
+
+# Select only the specific pool
+swap_df, created_df, mint_df, burn_df = [
+    df.loc[df["pool_contract_address"] == pool_address.lower()] for df in [
+        swap_df, created_df, mint_df, burn_df]]
+
+# Add the event type
+created_df['Event'] = ['Creation']*len(created_df)
+mint_df['Event'] = ['Mint']*len(mint_df)
+burn_df['Event'] = ['Burn']*len(burn_df)
+
+# Add price and value columns
+def tick2price(row, tick_col):
+    # USDC/WETH pool has reverse token order, so let's flip it WETH/USDC
+    return float(pool_details.convert_price_to_human(row[tick_col], reverse_token_order=reverse_quote_base))
+# def convert_value(row):
+#     # USDC is token0 and amount0
+#     return abs(float(row["amount0"])) / (10**pool_details.token0.decimals)
+swap_df["price"] = swap_df.apply(tick2price, axis=1, args=("tick",))
+mint_df["price_lower"] = mint_df.apply(tick2price, axis=1, args=("tick_upper",))
+mint_df["price_upper"] = mint_df.apply(tick2price, axis=1, args=("tick_lower",))
+burn_df["price_lower"] = burn_df.apply(tick2price, axis=1, args=("tick_upper",))
+burn_df["price_upper"] = burn_df.apply(tick2price, axis=1, args=("tick_lower",))
+
+# Normalize amounts
+swap_df['amount0'] = swap_df.apply(
+    lambda x: float(int(x['amount0']) / 10**pool_details.token0.decimals), axis=1)
+swap_df['amount1'] = swap_df.apply(
+    lambda x: float(int(x['amount1']) / 10**pool_details.token1.decimals), axis=1)
+swap_df['Event'] = np.where(swap_df.amount0>0, 'Swap_X2Y', 'Swap_Y2X')
+delta_decimals = pool_details.token0.decimals - pool_details.token1.decimals
+swap_df['liquidity'] = swap_df.apply(
+    lambda x: float(int(x['liquidity']) * 10**(delta_decimals)), axis=1)
+
+swap_df["transaction_price"] = np.where(reverse_quote_base,
+                                        np.abs(swap_df.amount0 / swap_df.amount1),
+                                        np.abs(swap_df.amount1 / swap_df.amount0))
+
+# Normalize mint and burn ammounts
+mint_df['amount0'] = mint_df.apply(
+    lambda x: float(int(x['amount0']) / 10**pool_details.token0.decimals), axis=1)
+mint_df['amount1'] = mint_df.apply(
+    lambda x: float(int(x['amount1']) / 10**pool_details.token1.decimals), axis=1)
+mint_df['amount'] = mint_df.apply(
+    lambda x: float(int(x['amount']) * 10**(delta_decimals)), axis=1)
+burn_df['amount0'] = burn_df.apply(
+    lambda x: float(int(x['amount0']) / 10**pool_details.token0.decimals), axis=1)
+burn_df['amount1'] = burn_df.apply(
+    lambda x: float(int(x['amount1']) / 10**pool_details.token1.decimals), axis=1)
+burn_df['amount'] = burn_df.apply(
+    lambda x: float(int(x['amount']) * 10**(delta_decimals)), axis=1)
+
+# List of all DataFrames
+dfs = [df.loc[df["pool_contract_address"] == pool_address.lower()] for df in [
+    swap_df, created_df, mint_df, burn_df]]
+
+# Create a union of all columns
+all_columns = list(set().union(*[df.columns for df in dfs]))
+
+# Reindex each DataFrame to ensure all columns are present, filling missing values with NaN
+dfs = [df.reindex(columns=all_columns) for df in dfs]
+
+# Concatenate DataFrames along rows
+df = pd.concat(dfs, ignore_index=True)
+
+# Remove some useless columns
+df.drop(columns=['token0_symbol', 'token1_symbol', 'tx_hash', 'sqrt_price_x96',
+                 'token0_address', 'token1_address', 'fee',
+                 'factory_contract_address', 'pool_contract_address'], inplace=True)
+
+df.index = df.timestamp; df.drop(columns=['timestamp'], inplace=True)
+df = df.sort_index()
+
+if first_block == 0:
+    df_first = df.copy()
+else:
+    df = pd.concat([df_first, df])
+    with open(f'../data/wbtc_usdc_005.pickle', 'wb') as f:
+        pickle.dump(df, f)
+
 #%% Liquidity problem
 
 import pickle
@@ -202,6 +336,15 @@ warnings.filterwarnings('ignore')
 folder = '../data/tmp3'
 with open(f'{folder}/usdc_weth_005.pickle', 'rb') as f:
     df = pickle.load(f)
+
+potential_duplicated = df[ df.duplicated() ].block_number.unique()
+sure_duplicated = list()
+for block in potential_duplicated:
+    temp_df = df[ df.block_number==block ]
+    if (temp_df.duplicated()).sum()*2 == len(temp_df):
+        sure_duplicated.append(block)
+df = df[~ (df['block_number'].isin(sure_duplicated) & df.duplicated())]
+
 df.index = pd.to_datetime(df.index)
 df = df[['amount', 'price_lower', 'price_upper', 'Event']]
 
@@ -213,17 +356,26 @@ for t_burn in tqdm(range(len(df_burn)), desc='Iterating over burn events'):
     # Initialize the amount to absorb
     to_absorb = df_burn['amount'].iloc[t_burn]
     t = 0
+    #to_remove = list()
 
-    while (to_absorb>0) and (df_mint.index[t] < df_burn.index[t_burn]):
+    while (to_absorb>0) and (df_mint.index[t] <= df_burn.index[t_burn]):
         if np.isclose(df_burn['price_lower'].iloc[t_burn], df_mint['price_lower'].iloc[t]) &\
             np.isclose(df_burn['price_upper'].iloc[t_burn], df_mint['price_upper'].iloc[t]):
-            if to_absorb > df_mint['amount'].iloc[t]:
+            if np.isclose(to_absorb, df_mint['amount'].iloc[t]):
+                df_mint['amount'].iloc[t] = 0
+                to_absorb = 0
+                #to_remove.append(t)
+            elif to_absorb > df_mint['amount'].iloc[t]:
                 to_absorb -= df_mint['amount'].iloc[t]
                 df_mint['amount'].iloc[t] = 0
+                #to_remove.append(t)
             else:
                 df_mint['amount'].iloc[t] -= to_absorb
                 to_absorb = 0
         t += 1
+    
+    # for t in to_remove[::-1]:
+    #     df_mint.drop(df_mint.index[t], inplace=True)
 
     if not np.isclose(to_absorb, 0):
         print('Errore!!!')
@@ -231,7 +383,7 @@ for t_burn in tqdm(range(len(df_burn)), desc='Iterating over burn events'):
 
 df_mint_temp = df_mint[ df_mint.index<=pd.to_datetime('2021-05-20 09:14:48') ]
 
-df_mint_temp[ (df_mint_temp.price_upper > 10_000) & (df_mint_temp.price_lower < 3_500) & (df_mint_temp.price_lower > 3_450)]
+df_mint_temp[ (df_mint_temp.price_upper > 10_000) & (df_mint_temp.price_upper < 3_500) & (df_mint_temp.price_lower > 3_450) & (df_mint_temp.price_lower < 2431)]
 
 
 
