@@ -164,6 +164,7 @@ logs/
 runs/
 models/
 data/
+tmp/
 
 # personal notebooks
 personal.ipynb

@@ -62,6 +62,15 @@ class SimpleNet(nn.Module):
         self.layers.append(nn.Linear(hidden_neurons[-1], input_dim))
         self.output_activation = nn.Sigmoid()
 
+        # Apply Glorot initialization to each layer
+        self._initialize_weights()
+    
+    def _initialize_weights(self):
+        for layer in self.layers:
+            if isinstance(layer, nn.Linear):
+                nn.init.xavier_normal_(layer.weight)
+                nn.init.zeros_(layer.bias)
+
     def forward(self, x):
         for i in range(self.n_layers):
             x = self.layers[i * 2](x)
@@ -87,6 +96,12 @@ def monotonic_loss(z_batch, F_z_batch):
     '''Implement the monotonic loss for the NN.'''
     f_z_batch = torch.autograd.grad(F_z_batch, z_batch, grad_outputs=torch.ones_like(F_z_batch), create_graph=True, retain_graph=True)[0]
     return torch.where(f_z_batch > 0, torch.zeros_like(f_z_batch), f_z_batch).sum()
+
+def monotonic_loss_soft(z_batch, F_z_batch):
+    '''Implement the monotonic loss for the NN with a soft constraint.'''
+    f_z_batch = torch.autograd.grad(F_z_batch, z_batch, grad_outputs=torch.ones_like(F_z_batch), create_graph=True, retain_graph=True)[0]
+    penalty = torch.relu(f_z_batch)  # Use ReLU to penalize positive gradients
+    return (penalty).sum()
 
 def l2_regularization(net):
     '''Implement the L2 regularization for the NN.'''
@@ -174,7 +189,7 @@ if __name__ == "__main__":
 
         # Compute the loss
         score_loss = scoring_loss(z_batch, F_z_batch, y_batch, l=l, num_points=n_scoring_points)
-        monotonic_penalty = monotonic_loss(z_batch, F_z_batch)
+        monotonic_penalty = monotonic_loss_soft(z_batch, F_z_batch)
         l2_reg = l2_regularization(net)
         # Compute the total loss
         loss = score_loss + 0.01 * monotonic_penalty + 0.01 * l2_reg
@@ -247,7 +262,7 @@ if __name__ == "__main__":
     axes[1].legend()
     if not os.path.exists('images'):
         os.makedirs('images')
-    fig.savefig(f'images/CDF_normal_{args}.png')
+    fig.savefig(f'images/{os.getpid()}_CDF_normal_{args}.png')
     
     print(os.getpid())
 
