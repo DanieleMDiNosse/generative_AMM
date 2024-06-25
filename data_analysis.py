@@ -1,7 +1,7 @@
 '''This script contains some functions that can be used to visualize and analyze the data from the Uniswap V3 dataset.'''
 
 import pickle
-import os
+import random
 import numba as nb
 import numpy as np
 import matplotlib.pyplot as plt
@@ -12,6 +12,7 @@ import imageio
 import argparse
 from eth_defi.uniswap_v3.liquidity import create_tick_delta_csv
 from eth_defi.uniswap_v3.liquidity import create_tick_csv
+from eth_defi.uniswap_v3.liquidity import get_pool_state_at_block
 
 def time_diff_dist(pair_df, event):
     df = pair_df[pair_df['Event'] == event]
@@ -45,13 +46,37 @@ def liquidity_dist_per_prange(pair_df, delta):
     liquidity_distribution = liquidity_events['amount'].groupby(price_bins, observed=False).sum()
     return liquidity_distribution
 
-def liquidity_dist_per_tickid(mint_df_path, burn_df_path, pool_address):
+def liquidity_dist_per_tickid(mint_df_path, burn_df_path, pool_address, compare_w_thegpraph=True):
     tick_delta_csv = create_tick_delta_csv(mint_df_path, burn_df_path)
     tick_csv = create_tick_csv(tick_delta_csv)
     tick_df = pd.read_csv(tick_csv)
     df = tick_df[tick_df.pool_contract_address == pool_address].sort_values(by="tick_id")
+    print(tick_df.head())
     df["liquidity_gross_delta"].astype(float).plot()
-    return None
+
+    if compare_w_thegpraph:
+        tickdelta_df = pd.read_csv(tick_delta_csv)
+        print(tickdelta_df[tickdelta_df.pool_contract_address == pool_address].tail())
+        compare_liq_per_tickid_w_thegraph(tickdelta_df, df, pool_address)
+
+    return df
+
+def compare_liq_per_tickid_w_thegraph(tick_delta_csv, df, pool_address):
+    last_processed_block = tick_delta_csv[tick_delta_csv.pool_contract_address == pool_address].tail(1).block_number
+    last_processed_block = int(last_processed_block.values[0])
+    pool_state = get_pool_state_at_block(pool_address, last_processed_block)
+    ticks = pool_state["ticks"]
+    # get some random ticks from subgraph
+    for i in range(10):
+        random_tick = random.choice(ticks)
+
+        # get the same tick from dataframe
+        random_tick_df = df[df.tick_id == int(random_tick["tickIdx"])]
+
+        # compare data
+        assert int(random_tick_df.liquidity_gross_delta.values[0]) == int(random_tick["liquidityGross"])
+        assert int(random_tick_df.liquidity_net_delta.values[0]) == int(random_tick["liquidityNet"])
+
 
 def sliding_window_difference(liquidity_events_df, window_size, step_size):
     differences = []
@@ -89,13 +114,15 @@ if __name__ == '__main__':
         args.sliding_window_difference = True
 
     # Load the data
-    usdc_weth = pickle.load(open('data/usdc_weth_05.pickle', 'rb'))
-    usdc_weth = usdc_weth.drop_duplicates()
+    usdc_weth_005 = pickle.load(open('data/usdc_weth_005.pickle', 'rb'))
+    usdc_weth_03 = pickle.load(open('data/usdc_weth_03.pickle', 'rb'))
+    usdc_weth_1 = pickle.load(open('data/usdc_weth_1.pickle', 'rb'))
+    pair_df = usdc_weth_03.drop_duplicates()
 
     if args.time_diffs:
         fig, ax = plt.subplots(2, 2, figsize=(13, 8), tight_layout=True)
         for i, event in enumerate(['Mint', 'Burn', 'Swap_X2Y', 'Swap_Y2X']):
-            time_diff = time_diff_dist(usdc_weth, event)
+            time_diff = time_diff_dist(pair_df, event)
             # plot histograms
             ax[i//2, i%2].hist(time_diff, bins=100, log=True)
             ax[i//2, i%2].set_title(f'Time differences for {event}')
@@ -105,7 +132,7 @@ if __name__ == '__main__':
     if args.liquidity_amounts:
         fig, ax = plt.subplots(2, 2, figsize=(13, 8), tight_layout=True)
         for i, event in enumerate(['Mint', 'Burn', 'Swap_X2Y', 'Swap_Y2X']):
-            liquidity_amounts = liquidity_events_amount_dist(usdc_weth, event, token=1)
+            liquidity_amounts = liquidity_events_amount_dist(pair_df, event, token=1)
             # plot histograms
             ax[i//2, i%2].hist(liquidity_amounts, bins=100, log=True)
             ax[i//2, i%2].set_title(f'Liquidity amounts for {event}')
@@ -113,33 +140,35 @@ if __name__ == '__main__':
         plt.savefig('images/liquidity_amounts.png')
 
     if args.liquidity_dist_price:
-        liquidity_dist = liquidity_dist_per_prange(usdc_weth, delta=100)
+        liquidity_dist = liquidity_dist_per_prange(pair_df, delta=100)
+        print(liquidity_dist)
         # Plot the distribution of liquidity across price ranges
         plt.figure(figsize=(10, 4))
         liquidity_dist.plot(kind='bar', edgecolor='k', alpha=0.7)
         plt.xlabel('Price Ranges')
         plt.ylabel('Total Liquidity')
         plt.title('Distribution of Liquidity for USDC/WETH pool')
-        plt.xticks(rotation=45)
+        plt.xticks(rotation=90)
         plt.grid(True)
         plt.tight_layout()
         plt.savefig('images/liquidity_dist_price.png')
         plt.show()
 
     if args.liquidity_dist_tickid:
-        uni_eth_03 = '0x1d42064fc4beb5f8aaf85f4617ae8b3b5b8bd801'
-        usdc_weth_05 = "0x88e6A0c2dDD26FEEb64F039a2c41296FcB3f5640" #USDC-WETH 05
-        usdc_weth_03 = "0x8ad599c3A0ff1De082011EFDDc58f1908eb6e6D8" #USDC-WETH 03
+        uni_eth_03 = '0x1d42064fc4beb5f8aaf85f4617ae8b3b5b8bd801'  # UNI/ETH 0.3%
+        usdc_weth_005 = "0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640" #USDC-WETH 005
+        usdc_weth_03 = "0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8" #USDC-WETH 03
         dai_weth_ = "0x7bea39867e4169dbe237d55c8242a8f2fcdcc387" #USDC-WETH 1
         dai_usdc_ = "0x3416cf6c708da44db2624d63ea0aaef7113527c6" #DAI-USDC 001
         wbtc_usdc_03 = "0x99ac8ca7087fa4a2a1fb6357269965a2014abc35" #WBTC-USDC 03
         wbtc_usdt_03 = "0x9db9e0e53058c89e5b94e29621a205198648425b" #WBTC-USDT 03
-        liquidity_dist_per_tickid('data/uniswap-v3-mint.csv', 'data/uniswap-v3-burn.csv', usdc_weth_05)
+        df = liquidity_dist_per_tickid('data/uniswap-v3-mint.csv', 'data/uniswap-v3-burn.csv', usdc_weth_03, compare_w_thegpraph=True)
+        df.to_csv('data/liquidity_dist_per_tickid.csv')
         plt.savefig('images/liquidity_dist_tickid.png')
         plt.show()
     
     if args.sliding_window_difference:
-        timestamps, differences = sliding_window_difference(usdc_weth, window_size=3000, step_size=50)
+        timestamps, differences = sliding_window_difference(pair_df, window_size=3000, step_size=50)
         plt.figure(figsize=(10, 4))
         # plt.plot(timestamps, differences[:, 0], label='Amount1')
         # plt.plot(timestamps, differences[:, 1], label='Amount0')
