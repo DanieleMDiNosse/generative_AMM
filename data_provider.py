@@ -87,6 +87,9 @@ pool_address = "0x3416cf6c708da44db2624d63ea0aaef7113527c6" #DAI-USDC 001
 pool_address = "0x99ac8ca7087fa4a2a1fb6357269965a2014abc35" #WBTC-USDC 03
 pool_address = "0x9db9e0e53058c89e5b94e29621a205198648425b" #WBTC-USDT 03
 pool_details = fetch_pool_details(web3, pool_address)
+print(pool_details.token0)
+print(pool_details.token1)
+exit()
 
 reverse_quote_base = False
 

@@ -14,7 +14,7 @@ import dask.dataframe as dd
 from data_processing import plot_price_and_liquidity, slice_price_by_liquidity_dists
 from input_data_creation_cython import optimize_dataframe
 
-class CustomNN(nn.Module):
+class NeuralCDF(nn.Module):
     def __init__(self, n1, n2, lstm_hidden_dim, lstm_layers, dense_layers, output_dim, dropout=0.5):
         """
         Initialize the CustomNN model.
@@ -29,9 +29,12 @@ class CustomNN(nn.Module):
             dropout (float): Dropout probability to be applied after each dense layer.
         """
         super(CustomNN, self).__init__()
+        # batch_first=True indicates that the input data will have the shape (batch_size, sequence_length, n1)
+        # while the output data will have the shape (batch_size, sequence_length, lstm_hidden_dim)
         self.lstm = nn.LSTM(input_size=n1, hidden_size=lstm_hidden_dim, num_layers=lstm_layers, batch_first=True)
         self.dropout = nn.Dropout(dropout)
         
+        # Create a list of dense layers using nn.ModuleList
         self.dense_layers = nn.ModuleList()
         
         # First dense layer (input: lstm_hidden_dim + n2)
@@ -61,6 +64,45 @@ class CustomNN(nn.Module):
         
         x = torch.sigmoid(self.output_layer(x))
         return x
+    
+    def crps_loss(self, z_batch, y_batch, l=3, num_points=200):
+        '''
+        Compute the CRPS loss for the model and input batches.
+        
+        Parameters:
+        z_batch: torch.Tensor - Batch of z values (batch_size, dim)
+        y_batch: torch.Tensor - Batch of y values (batch_size, dim)
+        l: int - Limits for integration (default=3)
+        num_points: int - Number of points for integration (default=200)
+        
+        Returns:
+        torch.Tensor - The CRPS loss
+        '''
+        # Pass z_batch through the neural network
+        F_z_batch = self.forward(z_batch)
+        
+        # Integral argument computation
+        f = torch.where(z_batch >= y_batch, (F_z_batch - 1) ** 2, F_z_batch ** 2)
+        
+        # dx for integration
+        dx = 2 * l / (num_points - 1)
+        
+        # Integral approximation
+        integral = (torch.sum(f) + 0.5 * (torch.sum(f[:, 0]) + torch.sum(f[:, -1]))) * dx
+        
+        return integral
+    
+    def monotonic_loss(self, z_batch, F_z_batch):
+        '''Implement the monotonic loss for the NN.'''
+        f_z_batch = torch.autograd.grad(F_z_batch, z_batch, grad_outputs=torch.ones_like(F_z_batch), create_graph=True, retain_graph=True)[0]
+        return torch.where(f_z_batch > 0, torch.zeros_like(f_z_batch), f_z_batch).sum()
+
+    def l2_regularization(self):
+        '''Implement the L2 regularization for the NN.'''
+        l2_reg = torch.tensor(0.)
+        for param in self.parameters():
+            l2_reg += torch.sum(param ** 2)
+        return l2_reg
 
 if __name__ == '__main__':
 
