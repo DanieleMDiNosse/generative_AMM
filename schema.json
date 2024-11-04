@@ -1,0 +1,4436 @@
+{
+  "data": {
+    "__schema": {
+      "types": [
+        {
+          "fields": null,
+          "name": "Aggregation_interval"
+        },
+        {
+          "fields": null,
+          "name": "BigDecimal"
+        },
+        {
+          "fields": null,
+          "name": "BigInt"
+        },
+        {
+          "fields": null,
+          "name": "BlockChangedFilter"
+        },
+        {
+          "fields": null,
+          "name": "Block_height"
+        },
+        {
+          "fields": null,
+          "name": "Boolean"
+        },
+        {
+          "fields": [
+            {
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID"
+                }
+              }
+            },
+            {
+              "name": "ethPriceUSD",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            }
+          ],
+          "name": "Bundle"
+        },
+        {
+          "fields": null,
+          "name": "Bundle_filter"
+        },
+        {
+          "fields": null,
+          "name": "Bundle_orderBy"
+        },
+        {
+          "fields": [
+            {
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID"
+                }
+              }
+            },
+            {
+              "name": "transaction",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Transaction"
+                }
+              }
+            },
+            {
+              "name": "pool",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Pool"
+                }
+              }
+            },
+            {
+              "name": "token0",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Token"
+                }
+              }
+            },
+            {
+              "name": "token1",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Token"
+                }
+              }
+            },
+            {
+              "name": "timestamp",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "owner",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Bytes",
+                "ofType": null
+              }
+            },
+            {
+              "name": "origin",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Bytes"
+                }
+              }
+            },
+            {
+              "name": "amount",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "amount0",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "amount1",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "amountUSD",
+              "type": {
+                "kind": "SCALAR",
+                "name": "BigDecimal",
+                "ofType": null
+              }
+            },
+            {
+              "name": "tickLower",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "tickUpper",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "logIndex",
+              "type": {
+                "kind": "SCALAR",
+                "name": "BigInt",
+                "ofType": null
+              }
+            }
+          ],
+          "name": "Burn"
+        },
+        {
+          "fields": null,
+          "name": "Burn_filter"
+        },
+        {
+          "fields": null,
+          "name": "Burn_orderBy"
+        },
+        {
+          "fields": null,
+          "name": "Bytes"
+        },
+        {
+          "fields": [
+            {
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID"
+                }
+              }
+            },
+            {
+              "name": "transaction",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Transaction"
+                }
+              }
+            },
+            {
+              "name": "timestamp",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "pool",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Pool"
+                }
+              }
+            },
+            {
+              "name": "owner",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Bytes",
+                "ofType": null
+              }
+            },
+            {
+              "name": "amount0",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "amount1",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "amountUSD",
+              "type": {
+                "kind": "SCALAR",
+                "name": "BigDecimal",
+                "ofType": null
+              }
+            },
+            {
+              "name": "tickLower",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "tickUpper",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "logIndex",
+              "type": {
+                "kind": "SCALAR",
+                "name": "BigInt",
+                "ofType": null
+              }
+            }
+          ],
+          "name": "Collect"
+        },
+        {
+          "fields": null,
+          "name": "Collect_filter"
+        },
+        {
+          "fields": null,
+          "name": "Collect_orderBy"
+        },
+        {
+          "fields": [
+            {
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID"
+                }
+              }
+            },
+            {
+              "name": "poolCount",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "txCount",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "totalVolumeUSD",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "totalVolumeETH",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "totalFeesUSD",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "totalFeesETH",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "untrackedVolumeUSD",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "totalValueLockedUSD",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "totalValueLockedETH",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "totalValueLockedUSDUntracked",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "totalValueLockedETHUntracked",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "owner",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID"
+                }
+              }
+            }
+          ],
+          "name": "Factory"
+        },
+        {
+          "fields": null,
+          "name": "Factory_filter"
+        },
+        {
+          "fields": null,
+          "name": "Factory_orderBy"
+        },
+        {
+          "fields": [
+            {
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID"
+                }
+              }
+            },
+            {
+              "name": "transaction",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Transaction"
+                }
+              }
+            },
+            {
+              "name": "timestamp",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "pool",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Pool"
+                }
+              }
+            },
+            {
+              "name": "sender",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Bytes"
+                }
+              }
+            },
+            {
+              "name": "recipient",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Bytes"
+                }
+              }
+            },
+            {
+              "name": "amount0",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "amount1",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "amountUSD",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "amount0Paid",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "amount1Paid",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "logIndex",
+              "type": {
+                "kind": "SCALAR",
+                "name": "BigInt",
+                "ofType": null
+              }
+            }
+          ],
+          "name": "Flash"
+        },
+        {
+          "fields": null,
+          "name": "Flash_filter"
+        },
+        {
+          "fields": null,
+          "name": "Flash_orderBy"
+        },
+        {
+          "fields": null,
+          "name": "Float"
+        },
+        {
+          "fields": null,
+          "name": "ID"
+        },
+        {
+          "fields": null,
+          "name": "Int"
+        },
+        {
+          "fields": null,
+          "name": "Int8"
+        },
+        {
+          "fields": [
+            {
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID"
+                }
+              }
+            },
+            {
+              "name": "transaction",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Transaction"
+                }
+              }
+            },
+            {
+              "name": "timestamp",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "pool",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Pool"
+                }
+              }
+            },
+            {
+              "name": "token0",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Token"
+                }
+              }
+            },
+            {
+              "name": "token1",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Token"
+                }
+              }
+            },
+            {
+              "name": "owner",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Bytes"
+                }
+              }
+            },
+            {
+              "name": "sender",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Bytes",
+                "ofType": null
+              }
+            },
+            {
+              "name": "origin",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Bytes"
+                }
+              }
+            },
+            {
+              "name": "amount",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "amount0",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "amount1",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "amountUSD",
+              "type": {
+                "kind": "SCALAR",
+                "name": "BigDecimal",
+                "ofType": null
+              }
+            },
+            {
+              "name": "tickLower",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "tickUpper",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "logIndex",
+              "type": {
+                "kind": "SCALAR",
+                "name": "BigInt",
+                "ofType": null
+              }
+            }
+          ],
+          "name": "Mint"
+        },
+        {
+          "fields": null,
+          "name": "Mint_filter"
+        },
+        {
+          "fields": null,
+          "name": "Mint_orderBy"
+        },
+        {
+          "fields": null,
+          "name": "OrderDirection"
+        },
+        {
+          "fields": [
+            {
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID"
+                }
+              }
+            },
+            {
+              "name": "createdAtTimestamp",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "createdAtBlockNumber",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "token0",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Token"
+                }
+              }
+            },
+            {
+              "name": "token1",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Token"
+                }
+              }
+            },
+            {
+              "name": "feeTier",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "liquidity",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "sqrtPrice",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "feeGrowthGlobal0X128",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "feeGrowthGlobal1X128",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "token0Price",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "token1Price",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "tick",
+              "type": {
+                "kind": "SCALAR",
+                "name": "BigInt",
+                "ofType": null
+              }
+            },
+            {
+              "name": "observationIndex",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "volumeToken0",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "volumeToken1",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "volumeUSD",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "untrackedVolumeUSD",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "feesUSD",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "txCount",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "collectedFeesToken0",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "collectedFeesToken1",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "collectedFeesUSD",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "totalValueLockedToken0",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "totalValueLockedToken1",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "totalValueLockedETH",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "totalValueLockedUSD",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "totalValueLockedUSDUntracked",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "liquidityProviderCount",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "poolHourData",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "poolDayData",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "mints",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "burns",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "swaps",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "collects",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "ticks",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            }
+          ],
+          "name": "Pool"
+        },
+        {
+          "fields": [
+            {
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID"
+                }
+              }
+            },
+            {
+              "name": "date",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int"
+                }
+              }
+            },
+            {
+              "name": "pool",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Pool"
+                }
+              }
+            },
+            {
+              "name": "liquidity",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "sqrtPrice",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "token0Price",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "token1Price",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "tick",
+              "type": {
+                "kind": "SCALAR",
+                "name": "BigInt",
+                "ofType": null
+              }
+            },
+            {
+              "name": "feeGrowthGlobal0X128",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "feeGrowthGlobal1X128",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "tvlUSD",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "volumeToken0",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "volumeToken1",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "volumeUSD",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "feesUSD",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "txCount",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "open",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "high",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "low",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "close",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            }
+          ],
+          "name": "PoolDayData"
+        },
+        {
+          "fields": null,
+          "name": "PoolDayData_filter"
+        },
+        {
+          "fields": null,
+          "name": "PoolDayData_orderBy"
+        },
+        {
+          "fields": [
+            {
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID"
+                }
+              }
+            },
+            {
+              "name": "periodStartUnix",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int"
+                }
+              }
+            },
+            {
+              "name": "pool",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Pool"
+                }
+              }
+            },
+            {
+              "name": "liquidity",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "sqrtPrice",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "token0Price",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "token1Price",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "tick",
+              "type": {
+                "kind": "SCALAR",
+                "name": "BigInt",
+                "ofType": null
+              }
+            },
+            {
+              "name": "feeGrowthGlobal0X128",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "feeGrowthGlobal1X128",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "tvlUSD",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "volumeToken0",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "volumeToken1",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "volumeUSD",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "feesUSD",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "txCount",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "open",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "high",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "low",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "close",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            }
+          ],
+          "name": "PoolHourData"
+        },
+        {
+          "fields": null,
+          "name": "PoolHourData_filter"
+        },
+        {
+          "fields": null,
+          "name": "PoolHourData_orderBy"
+        },
+        {
+          "fields": null,
+          "name": "Pool_filter"
+        },
+        {
+          "fields": null,
+          "name": "Pool_orderBy"
+        },
+        {
+          "fields": [
+            {
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID"
+                }
+              }
+            },
+            {
+              "name": "owner",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Bytes"
+                }
+              }
+            },
+            {
+              "name": "pool",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Pool"
+                }
+              }
+            },
+            {
+              "name": "token0",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Token"
+                }
+              }
+            },
+            {
+              "name": "token1",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Token"
+                }
+              }
+            },
+            {
+              "name": "tickLower",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Tick"
+                }
+              }
+            },
+            {
+              "name": "tickUpper",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Tick"
+                }
+              }
+            },
+            {
+              "name": "liquidity",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "depositedToken0",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "depositedToken1",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "withdrawnToken0",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "withdrawnToken1",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "collectedFeesToken0",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "collectedFeesToken1",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "transaction",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Transaction"
+                }
+              }
+            },
+            {
+              "name": "feeGrowthInside0LastX128",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "feeGrowthInside1LastX128",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            }
+          ],
+          "name": "Position"
+        },
+        {
+          "fields": [
+            {
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID"
+                }
+              }
+            },
+            {
+              "name": "owner",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Bytes"
+                }
+              }
+            },
+            {
+              "name": "pool",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Pool"
+                }
+              }
+            },
+            {
+              "name": "position",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Position"
+                }
+              }
+            },
+            {
+              "name": "blockNumber",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "timestamp",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "liquidity",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "depositedToken0",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "depositedToken1",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "withdrawnToken0",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "withdrawnToken1",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "collectedFeesToken0",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "collectedFeesToken1",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "transaction",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Transaction"
+                }
+              }
+            },
+            {
+              "name": "feeGrowthInside0LastX128",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "feeGrowthInside1LastX128",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            }
+          ],
+          "name": "PositionSnapshot"
+        },
+        {
+          "fields": null,
+          "name": "PositionSnapshot_filter"
+        },
+        {
+          "fields": null,
+          "name": "PositionSnapshot_orderBy"
+        },
+        {
+          "fields": null,
+          "name": "Position_filter"
+        },
+        {
+          "fields": null,
+          "name": "Position_orderBy"
+        },
+        {
+          "fields": [
+            {
+              "name": "factory",
+              "type": {
+                "kind": "OBJECT",
+                "name": "Factory",
+                "ofType": null
+              }
+            },
+            {
+              "name": "factories",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "bundle",
+              "type": {
+                "kind": "OBJECT",
+                "name": "Bundle",
+                "ofType": null
+              }
+            },
+            {
+              "name": "bundles",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "token",
+              "type": {
+                "kind": "OBJECT",
+                "name": "Token",
+                "ofType": null
+              }
+            },
+            {
+              "name": "tokens",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "pool",
+              "type": {
+                "kind": "OBJECT",
+                "name": "Pool",
+                "ofType": null
+              }
+            },
+            {
+              "name": "pools",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "tick",
+              "type": {
+                "kind": "OBJECT",
+                "name": "Tick",
+                "ofType": null
+              }
+            },
+            {
+              "name": "ticks",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "position",
+              "type": {
+                "kind": "OBJECT",
+                "name": "Position",
+                "ofType": null
+              }
+            },
+            {
+              "name": "positions",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "positionSnapshot",
+              "type": {
+                "kind": "OBJECT",
+                "name": "PositionSnapshot",
+                "ofType": null
+              }
+            },
+            {
+              "name": "positionSnapshots",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "transaction",
+              "type": {
+                "kind": "OBJECT",
+                "name": "Transaction",
+                "ofType": null
+              }
+            },
+            {
+              "name": "transactions",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "mint",
+              "type": {
+                "kind": "OBJECT",
+                "name": "Mint",
+                "ofType": null
+              }
+            },
+            {
+              "name": "mints",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "burn",
+              "type": {
+                "kind": "OBJECT",
+                "name": "Burn",
+                "ofType": null
+              }
+            },
+            {
+              "name": "burns",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "swap",
+              "type": {
+                "kind": "OBJECT",
+                "name": "Swap",
+                "ofType": null
+              }
+            },
+            {
+              "name": "swaps",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "collect",
+              "type": {
+                "kind": "OBJECT",
+                "name": "Collect",
+                "ofType": null
+              }
+            },
+            {
+              "name": "collects",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "flash",
+              "type": {
+                "kind": "OBJECT",
+                "name": "Flash",
+                "ofType": null
+              }
+            },
+            {
+              "name": "flashes",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "uniswapDayData",
+              "type": {
+                "kind": "OBJECT",
+                "name": "UniswapDayData",
+                "ofType": null
+              }
+            },
+            {
+              "name": "uniswapDayDatas",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "poolDayData",
+              "type": {
+                "kind": "OBJECT",
+                "name": "PoolDayData",
+                "ofType": null
+              }
+            },
+            {
+              "name": "poolDayDatas",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "poolHourData",
+              "type": {
+                "kind": "OBJECT",
+                "name": "PoolHourData",
+                "ofType": null
+              }
+            },
+            {
+              "name": "poolHourDatas",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "tickHourData",
+              "type": {
+                "kind": "OBJECT",
+                "name": "TickHourData",
+                "ofType": null
+              }
+            },
+            {
+              "name": "tickHourDatas",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "tickDayData",
+              "type": {
+                "kind": "OBJECT",
+                "name": "TickDayData",
+                "ofType": null
+              }
+            },
+            {
+              "name": "tickDayDatas",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "tokenDayData",
+              "type": {
+                "kind": "OBJECT",
+                "name": "TokenDayData",
+                "ofType": null
+              }
+            },
+            {
+              "name": "tokenDayDatas",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "tokenHourData",
+              "type": {
+                "kind": "OBJECT",
+                "name": "TokenHourData",
+                "ofType": null
+              }
+            },
+            {
+              "name": "tokenHourDatas",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "_meta",
+              "type": {
+                "kind": "OBJECT",
+                "name": "_Meta_",
+                "ofType": null
+              }
+            }
+          ],
+          "name": "Query"
+        },
+        {
+          "fields": null,
+          "name": "String"
+        },
+        {
+          "fields": [
+            {
+              "name": "factory",
+              "type": {
+                "kind": "OBJECT",
+                "name": "Factory",
+                "ofType": null
+              }
+            },
+            {
+              "name": "factories",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "bundle",
+              "type": {
+                "kind": "OBJECT",
+                "name": "Bundle",
+                "ofType": null
+              }
+            },
+            {
+              "name": "bundles",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "token",
+              "type": {
+                "kind": "OBJECT",
+                "name": "Token",
+                "ofType": null
+              }
+            },
+            {
+              "name": "tokens",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "pool",
+              "type": {
+                "kind": "OBJECT",
+                "name": "Pool",
+                "ofType": null
+              }
+            },
+            {
+              "name": "pools",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "tick",
+              "type": {
+                "kind": "OBJECT",
+                "name": "Tick",
+                "ofType": null
+              }
+            },
+            {
+              "name": "ticks",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "position",
+              "type": {
+                "kind": "OBJECT",
+                "name": "Position",
+                "ofType": null
+              }
+            },
+            {
+              "name": "positions",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "positionSnapshot",
+              "type": {
+                "kind": "OBJECT",
+                "name": "PositionSnapshot",
+                "ofType": null
+              }
+            },
+            {
+              "name": "positionSnapshots",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "transaction",
+              "type": {
+                "kind": "OBJECT",
+                "name": "Transaction",
+                "ofType": null
+              }
+            },
+            {
+              "name": "transactions",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "mint",
+              "type": {
+                "kind": "OBJECT",
+                "name": "Mint",
+                "ofType": null
+              }
+            },
+            {
+              "name": "mints",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "burn",
+              "type": {
+                "kind": "OBJECT",
+                "name": "Burn",
+                "ofType": null
+              }
+            },
+            {
+              "name": "burns",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "swap",
+              "type": {
+                "kind": "OBJECT",
+                "name": "Swap",
+                "ofType": null
+              }
+            },
+            {
+              "name": "swaps",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "collect",
+              "type": {
+                "kind": "OBJECT",
+                "name": "Collect",
+                "ofType": null
+              }
+            },
+            {
+              "name": "collects",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "flash",
+              "type": {
+                "kind": "OBJECT",
+                "name": "Flash",
+                "ofType": null
+              }
+            },
+            {
+              "name": "flashes",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "uniswapDayData",
+              "type": {
+                "kind": "OBJECT",
+                "name": "UniswapDayData",
+                "ofType": null
+              }
+            },
+            {
+              "name": "uniswapDayDatas",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "poolDayData",
+              "type": {
+                "kind": "OBJECT",
+                "name": "PoolDayData",
+                "ofType": null
+              }
+            },
+            {
+              "name": "poolDayDatas",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "poolHourData",
+              "type": {
+                "kind": "OBJECT",
+                "name": "PoolHourData",
+                "ofType": null
+              }
+            },
+            {
+              "name": "poolHourDatas",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "tickHourData",
+              "type": {
+                "kind": "OBJECT",
+                "name": "TickHourData",
+                "ofType": null
+              }
+            },
+            {
+              "name": "tickHourDatas",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "tickDayData",
+              "type": {
+                "kind": "OBJECT",
+                "name": "TickDayData",
+                "ofType": null
+              }
+            },
+            {
+              "name": "tickDayDatas",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "tokenDayData",
+              "type": {
+                "kind": "OBJECT",
+                "name": "TokenDayData",
+                "ofType": null
+              }
+            },
+            {
+              "name": "tokenDayDatas",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "tokenHourData",
+              "type": {
+                "kind": "OBJECT",
+                "name": "TokenHourData",
+                "ofType": null
+              }
+            },
+            {
+              "name": "tokenHourDatas",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "_meta",
+              "type": {
+                "kind": "OBJECT",
+                "name": "_Meta_",
+                "ofType": null
+              }
+            }
+          ],
+          "name": "Subscription"
+        },
+        {
+          "fields": [
+            {
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID"
+                }
+              }
+            },
+            {
+              "name": "transaction",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Transaction"
+                }
+              }
+            },
+            {
+              "name": "timestamp",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "pool",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Pool"
+                }
+              }
+            },
+            {
+              "name": "token0",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Token"
+                }
+              }
+            },
+            {
+              "name": "token1",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Token"
+                }
+              }
+            },
+            {
+              "name": "sender",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Bytes"
+                }
+              }
+            },
+            {
+              "name": "recipient",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Bytes"
+                }
+              }
+            },
+            {
+              "name": "origin",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Bytes"
+                }
+              }
+            },
+            {
+              "name": "amount0",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "amount1",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "amountUSD",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "sqrtPriceX96",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "tick",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "logIndex",
+              "type": {
+                "kind": "SCALAR",
+                "name": "BigInt",
+                "ofType": null
+              }
+            }
+          ],
+          "name": "Swap"
+        },
+        {
+          "fields": null,
+          "name": "Swap_filter"
+        },
+        {
+          "fields": null,
+          "name": "Swap_orderBy"
+        },
+        {
+          "fields": [
+            {
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID"
+                }
+              }
+            },
+            {
+              "name": "poolAddress",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            {
+              "name": "tickIdx",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "pool",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Pool"
+                }
+              }
+            },
+            {
+              "name": "liquidityGross",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "liquidityNet",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "price0",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "price1",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "volumeToken0",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "volumeToken1",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "volumeUSD",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "untrackedVolumeUSD",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "feesUSD",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "collectedFeesToken0",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "collectedFeesToken1",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "collectedFeesUSD",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "createdAtTimestamp",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "createdAtBlockNumber",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "liquidityProviderCount",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "feeGrowthOutside0X128",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "feeGrowthOutside1X128",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            }
+          ],
+          "name": "Tick"
+        },
+        {
+          "fields": [
+            {
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID"
+                }
+              }
+            },
+            {
+              "name": "date",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int"
+                }
+              }
+            },
+            {
+              "name": "pool",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Pool"
+                }
+              }
+            },
+            {
+              "name": "tick",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Tick"
+                }
+              }
+            },
+            {
+              "name": "liquidityGross",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "liquidityNet",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "volumeToken0",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "volumeToken1",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "volumeUSD",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "feesUSD",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "feeGrowthOutside0X128",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "feeGrowthOutside1X128",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            }
+          ],
+          "name": "TickDayData"
+        },
+        {
+          "fields": null,
+          "name": "TickDayData_filter"
+        },
+        {
+          "fields": null,
+          "name": "TickDayData_orderBy"
+        },
+        {
+          "fields": [
+            {
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID"
+                }
+              }
+            },
+            {
+              "name": "periodStartUnix",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int"
+                }
+              }
+            },
+            {
+              "name": "pool",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Pool"
+                }
+              }
+            },
+            {
+              "name": "tick",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Tick"
+                }
+              }
+            },
+            {
+              "name": "liquidityGross",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "liquidityNet",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "volumeToken0",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "volumeToken1",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "volumeUSD",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "feesUSD",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            }
+          ],
+          "name": "TickHourData"
+        },
+        {
+          "fields": null,
+          "name": "TickHourData_filter"
+        },
+        {
+          "fields": null,
+          "name": "TickHourData_orderBy"
+        },
+        {
+          "fields": null,
+          "name": "Tick_filter"
+        },
+        {
+          "fields": null,
+          "name": "Tick_orderBy"
+        },
+        {
+          "fields": null,
+          "name": "Timestamp"
+        },
+        {
+          "fields": [
+            {
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID"
+                }
+              }
+            },
+            {
+              "name": "symbol",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String"
+                }
+              }
+            },
+            {
+              "name": "name",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String"
+                }
+              }
+            },
+            {
+              "name": "decimals",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "totalSupply",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "volume",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "volumeUSD",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "untrackedVolumeUSD",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "feesUSD",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "txCount",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "poolCount",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "totalValueLocked",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "totalValueLockedUSD",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "totalValueLockedUSDUntracked",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "derivedETH",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "whitelistPools",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "tokenDayData",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            }
+          ],
+          "name": "Token"
+        },
+        {
+          "fields": [
+            {
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID"
+                }
+              }
+            },
+            {
+              "name": "date",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int"
+                }
+              }
+            },
+            {
+              "name": "token",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Token"
+                }
+              }
+            },
+            {
+              "name": "volume",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "volumeUSD",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "untrackedVolumeUSD",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "totalValueLocked",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "totalValueLockedUSD",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "priceUSD",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "feesUSD",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "open",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "high",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "low",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "close",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            }
+          ],
+          "name": "TokenDayData"
+        },
+        {
+          "fields": null,
+          "name": "TokenDayData_filter"
+        },
+        {
+          "fields": null,
+          "name": "TokenDayData_orderBy"
+        },
+        {
+          "fields": [
+            {
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID"
+                }
+              }
+            },
+            {
+              "name": "periodStartUnix",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int"
+                }
+              }
+            },
+            {
+              "name": "token",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Token"
+                }
+              }
+            },
+            {
+              "name": "volume",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "volumeUSD",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "untrackedVolumeUSD",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "totalValueLocked",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "totalValueLockedUSD",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "priceUSD",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "feesUSD",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "open",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "high",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "low",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "close",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            }
+          ],
+          "name": "TokenHourData"
+        },
+        {
+          "fields": null,
+          "name": "TokenHourData_filter"
+        },
+        {
+          "fields": null,
+          "name": "TokenHourData_orderBy"
+        },
+        {
+          "fields": null,
+          "name": "Token_filter"
+        },
+        {
+          "fields": null,
+          "name": "Token_orderBy"
+        },
+        {
+          "fields": [
+            {
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID"
+                }
+              }
+            },
+            {
+              "name": "blockNumber",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "timestamp",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "gasUsed",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "gasPrice",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "mints",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "burns",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "swaps",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "flashed",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            },
+            {
+              "name": "collects",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null
+                }
+              }
+            }
+          ],
+          "name": "Transaction"
+        },
+        {
+          "fields": null,
+          "name": "Transaction_filter"
+        },
+        {
+          "fields": null,
+          "name": "Transaction_orderBy"
+        },
+        {
+          "fields": [
+            {
+              "name": "id",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID"
+                }
+              }
+            },
+            {
+              "name": "date",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int"
+                }
+              }
+            },
+            {
+              "name": "volumeETH",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "volumeUSD",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "volumeUSDUntracked",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "feesUSD",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            },
+            {
+              "name": "txCount",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigInt"
+                }
+              }
+            },
+            {
+              "name": "tvlUSD",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "BigDecimal"
+                }
+              }
+            }
+          ],
+          "name": "UniswapDayData"
+        },
+        {
+          "fields": null,
+          "name": "UniswapDayData_filter"
+        },
+        {
+          "fields": null,
+          "name": "UniswapDayData_orderBy"
+        },
+        {
+          "fields": [
+            {
+              "name": "hash",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Bytes",
+                "ofType": null
+              }
+            },
+            {
+              "name": "number",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int"
+                }
+              }
+            },
+            {
+              "name": "timestamp",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            {
+              "name": "parentHash",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Bytes",
+                "ofType": null
+              }
+            }
+          ],
+          "name": "_Block_"
+        },
+        {
+          "fields": [
+            {
+              "name": "block",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "_Block_"
+                }
+              }
+            },
+            {
+              "name": "deployment",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String"
+                }
+              }
+            },
+            {
+              "name": "hasIndexingErrors",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean"
+                }
+              }
+            }
+          ],
+          "name": "_Meta_"
+        },
+        {
+          "fields": null,
+          "name": "_SubgraphErrorPolicy_"
+        }
+      ]
+    }
+  }
+}

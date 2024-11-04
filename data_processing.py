@@ -131,12 +131,26 @@ def slice_price_by_liquidity_dists(liquidity_dists, price, freq):
 
     return sliced_prices
 
-def liquidity_dist_per_tickid(mint_df_path, burn_df_path, pool_address, tick_bin_size, compare_w_thegpraph=True):
+def tick_to_price(tick, decimals_token0, decimals_token1, reverse):
+    '''If reverse is True, the resulting price is relative to token1 in terms of token0.
+    Otherwise, viceversa.'''
+    raw_price = 1.0001 ** tick
+    if reverse:
+        adjusted_price = 1/(raw_price * (10 ** (decimals_token0 - decimals_token1)))
+    else:
+        adjusted_price = raw_price * (10 ** (decimals_token0 - decimals_token1))
+    return adjusted_price
+
+def liquidity_dist_per_tickid(mint_df_path, 
+                              burn_df_path, 
+                              pool_address, 
+                              tick_bin_size, 
+                              token0decimals, 
+                              token1decimals, 
+                              compare_w_thegpraph=True):
     tick_delta_csv = create_tick_delta_csv(mint_df_path, burn_df_path)
     tick_csv = create_tick_csv(tick_delta_csv)
     tick_df = pd.read_csv(tick_csv)
-    tick_df.to_csv("data/tick_df.csv")
-    exit()
     df = tick_df[tick_df.pool_contract_address == pool_address].sort_values(by="tick_id")
     # Convert all the columns to float
     df = df.astype({col: 'float64' for col in df.columns if col != 'pool_contract_address'})
@@ -145,7 +159,8 @@ def liquidity_dist_per_tickid(mint_df_path, burn_df_path, pool_address, tick_bin
     negative_gross_values = df[df.liquidity_gross_delta < 0]
     if len(negative_gross_values) > 0:
         print(f'Negative gross values: {len(negative_gross_values)} over {len(df)}. Discarding them...')
-        df = df[df.liquidity_gross_delta >= 0]
+        # df = df[df.liquidity_gross_delta >= 0]
+        # df[df.liquidity_gross_delta < 0] *= -1 
     
     if tick_bin_size > 1:
         # Create a grouping column
@@ -155,6 +170,10 @@ def liquidity_dist_per_tickid(mint_df_path, burn_df_path, pool_address, tick_bin
             {'liquidity_gross_delta': 'sum', 'tick_id': 'last'}
         ).reset_index(drop=True)
 
+    # Adjust the price to the token decimals
+    df['price'] = df.apply(lambda x: tick_to_price(x['tick_id'], token0decimals, token1decimals, reverse=True), axis=1)
+
+    df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
 
     if compare_w_thegpraph:
         tickdelta_df = pd.read_csv(tick_delta_csv)
@@ -276,10 +295,18 @@ if __name__ == '__main__':
         dai_usdc_ = "0x3416cf6c708da44db2624d63ea0aaef7113527c6" #DAI-USDC 001
         wbtc_usdc_03 = "0x99ac8ca7087fa4a2a1fb6357269965a2014abc35" #WBTC-USDC 03
         wbtc_usdt_03 = "0x9db9e0e53058c89e5b94e29621a205198648425b" #WBTC-USDT 03
-        df = liquidity_dist_per_tickid('data/uniswap-v3-mint.csv', 'data/uniswap-v3-burn.csv', usdc_weth_005, tick_bin_size=1, compare_w_thegpraph=False)
+        # Read the pool details
+        pool_data = pickle.load(open('data/tmp/pool_details.pickle', 'rb'))
+        token0_decimals = pool_data['decimals0']
+        token1_decimals = pool_data['decimals1']
+        tick_bin_size = 1
+        df = liquidity_dist_per_tickid('data/uniswap-v3-mint.csv', 'data/uniswap-v3-burn.csv', 
+                                       usdc_weth_005, tick_bin_size, 
+                                       token0_decimals, token1_decimals, 
+                                       compare_w_thegpraph=False)
         df.to_csv('data/liquidity_dist_per_tickid.csv')
         plt.figure(figsize=(10, 4), tight_layout=True)
-        plt.plot(df['tick_id'], df['liquidity_gross_delta'])
+        plt.plot(df['price'], df['liquidity_gross_delta'])
         plt.savefig('images/liquidity_dist_tickid.png')
         plt.show()
     

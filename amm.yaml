@@ -1,0 +1,16 @@
+name: amm
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.12
+  - numpy
+  - matplotlib
+  - plotly
+  - seaborn
+  - scikit-learn
+  - pytorch
+  - tensorflow
+  - tensorboard
+  - cython
+  - numba
