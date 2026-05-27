@@ -7,7 +7,11 @@ import pickle
 import numpy as np
 import pandas as pd
 
-json_rpc_url = 'INSERT YOUR API URL HERE, e.g. https://eth.llamarpc.com/sk_llama_00000000000000000000000000000000'
+json_rpc_url = 'INSERT YOUR API URL HERE, e.g. https://eth-mainnet.g.alchemy.com/v2/00000000000000000000000000000000'
+'''
+Some providers:
+alchemy.com; ankr.com; infura.io; quicknode.com
+'''
 
 # General folder, where the whole blockchain data will be stored
 general_folder = 'tmp5'
@@ -37,7 +41,7 @@ web3 = fetch_events_to_csv(
     # Configure depending on what's eth_getLogs
     # limit of your JSON-RPC provider and also
     # how often you want to see progress bar updates
-    max_blocks_once=222,
+    max_blocks_once=10,
     # Do reading and decoding in parallel threads
     max_threads=8,
 )
